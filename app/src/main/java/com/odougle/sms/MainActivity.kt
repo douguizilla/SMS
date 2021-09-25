@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(this, permissions, 0)
         }
         smsSenderBroadcast = SmsSenderBroadcast()
-        registerReceiver(smsSenderBroadcast, IntentFilter(ACTION_SEND))
+        registerReceiver(smsSenderBroadcast, IntentFilter(ACTION_SENT))
         registerReceiver(smsSenderBroadcast, IntentFilter(ACTION_DELIVERED))
     }
 
@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity() {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if(!grantResults.all { it == PackageManager.PERMISSION_GRANTED }){
             Toast.makeText(this, "Voce necessita aceitar as permissoes", Toast.LENGTH_SHORT).show()
             finish()
@@ -78,6 +79,12 @@ class MainActivity : AppCompatActivity() {
             pitSent,
             pitDelivered
         )
+    }
 
+
+    companion object{
+        private const val REQUEST_SMS = 1
+        private const val ACTION_SENT = "sms_enviado"
+        private const val ACTION_DELIVERED = "sms_entregue"
     }
 }
